@@ -45,11 +45,11 @@ def index():
     #     {"title":"速度与激情","year":"2019"},
     #     {"title":"我的父亲母亲","year":"2010"},
     # ]
-    user = User.query.first()  #读取用户记录
+    # user = User.query.first()  #读取用户记录
     movie = Movie.query.all()  #读取所有的电影记录 
 
-    return render_template("index.html",user=user,movies=movie)
-
+    # return render_template("index.html",user=user,movies=movie)
+    return render_template("index.html",movies=movie)
 #     #动态url 
 # @app.route('/index/<name>')
 # def home(name):
@@ -91,3 +91,21 @@ def forge():
         db.session.add(movie)
     db.session.commit()
     click.echo("导入数据完成")
+
+
+# 错误处理 
+@app.errorhandler(404)
+def page_not_found(e):
+    # user = User.query.first()
+    # return render_template("404.html",user=user),404
+    # 返回模板和状态码
+    return render_template("404.html"),404
+
+# 模板上下文处理函数
+@app.context_processor
+def inject_user():
+    user = User.query.first()
+    return dict(user=user)
+
+
+
