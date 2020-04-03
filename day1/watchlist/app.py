@@ -2,7 +2,7 @@ import os
 import sys
 import click
 
-from flask import Flask,url_for,render_template
+from flask import Flask,url_for,render_template,request,url_for,redirect,flash
 from flask_sqlalchemy import SQLAlchemy 
 
 # 得到当前平台
@@ -18,7 +18,9 @@ app = Flask(__name__)
 
 # 配置要在实例化之前
 app.config['SQLALCHEMY_DATABASE_URI'] = prefix+os.path.join(app.root_path,'data.db')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False #关闭对模型修改的监控
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False 
+app.config['SECRET_KEY']='dev'
+#关闭对模型修改的监控
 
 # 传入app实例 在配置之后
 db=SQLAlchemy(app)
@@ -32,31 +34,69 @@ class Movie(db.Model):
     year = db.Column(db.String(4))
 
 
-@app.route("/")
-# @app.route("/index")
-# @app.route("/home")
+@app.route("/",methods=['GET','POST'])
 def index():
-    # name = "haominmin"
-    # movies = [
-    #     {"title":"大赢家","year":"2020"},
-    #     {"title":"囧妈","year":"2000"},
-    #     {"title":"战狼","year":"2018"},
-    #     {"title":"心花怒放","year":"2017"},
-    #     {"title":"速度与激情","year":"2019"},
-    #     {"title":"我的父亲母亲","year":"2010"},
-    # ]
-    # user = User.query.first()  #读取用户记录
+    if request.method =="POST":
+        name = request.form.get("movie_name")
+        year = request.form.get("movie_year")
+        # 验证数据不为空  year长度不能超过4 name 不能超过60
+        if not name or not year or len(year)>4 or len(name)>60:
+            flash("输入有误")
+            return redirect(url_for("index"))
+        movie = Movie(title=name,year=year)
+        db.session.add(movie)
+        db.session.commit()
+        flash("数据插入成功")
+        return redirect(url_for("index"))
+
+
+
     movie = Movie.query.all()  #读取所有的电影记录 
 
-    # return render_template("index.html",user=user,movies=movie)
     return render_template("index.html",movies=movie)
+
+
+# 编辑视图函数 
+@app.route('/movie/edit/<int:movies_id>',methods=['GET','POST'])
+def edit(movies_id):
+    mm = Movie.query.get_or_404(movies_id)
+    print(mm)
+    if request.method=="POST":
+        title = request.form['movie_name']
+        year = request.form['movie_year']
+
+        # 验证数据不为空  year长度不能超过4 name 不能超过60
+        if not title or not year or len(year)>4 or len(title)>60:
+            flash("输入有误")
+            return redirect(url_for("edit"),movie_id=movies_id)
+
+        mm.title =title
+        mm.year = year
+
+        # db.session.add(movie)
+        db.session.commit()
+        flash("数据编辑成功")
+        return redirect(url_for("index"))
+    return render_template("edit.html",movie=mm)
+
+
+# 删除
+@app.route('/movie/delete/<int:movies_id>',methods=['POST'])
+
+def delete(movies_id):
+    movie = Movie.query.get_or_404(movies_id)
+
+    db.session.delete(movie)
+    db.session.commit()
+    flash("数据删除成功")
+    return redirect(url_for('index'))
+
+
 #     #动态url 
 # @app.route('/index/<name>')
 # def home(name):
 #     print(url_for("home",name="haominmin"))
 #     return "<h1>hello,%s</h1>"%name
-
-
 # 自定义命令 
 @app.cli.command() #装饰器注册命令
 @click.option('--drop',is_flag=True,help='删除之后再创建')
@@ -106,6 +146,7 @@ def page_not_found(e):
 def inject_user():
     user = User.query.first()
     return dict(user=user)
+
 
 
 

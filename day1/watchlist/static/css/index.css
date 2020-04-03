@@ -17,12 +17,12 @@ footer{
 
 }
 /* 图片 */
-.avatar{
+.avatar{ 
     width: 50px;
 }
 
 /* 电影列表 */
-.movie-list li{
+.movie-list {
     list-style: none;
     padding: 0;
     margin-bottom: 15px;
@@ -67,7 +67,38 @@ nav li a:hover{
     font-weight: bold;
     color: black;
     text-decoration: none;
-    background: darkgray;
-    border-radius: 5px;
+    /* background: blue; */
+    /* border-radius: 5px; */
     padding: 3px 5px;
+}
+
+.btn{
+    font-size: 12px;
+    font-weight: bold;
+    color: black;
+    text-decoration: none;
+    /* background: mediumaquamarine; */
+    
+    /* border-radius: 5px; */
+    padding: 3px 5px;
+}
+.delete{
+    font-size: 12px;
+    font-weight: bold;
+    color: black;
+    text-decoration: none;
+    /* background: blue ; */
+    /* border-radius: 5px; */
+    padding: 3px 5px;
+}
+
+.alert{
+    position: relative;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid transparent;
+    border-color: teal;
+    /* background: blue rgba(20,20,20,20); */
+    /* border-radius: 5px; */
+    
 }
