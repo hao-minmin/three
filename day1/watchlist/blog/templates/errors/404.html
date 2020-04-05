@@ -1,0 +1,27 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ user.name }}'s watchlist</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='css/index.css')}}">
+</head>
+<body> -->
+    <!-- <h2>
+        <img src="{{url_for('static',filename='images/1.jpg')}}" alt="头像" class="avatar">
+        {{ user.name }}'s watchlist
+    </h2> -->
+    {% extends 'base.html' %}
+    {% block content %}
+    <ul class="movie-list">
+        页面跑丢了 ~~ 404
+        <span class="float-right">
+            <a href="{{url_for('index')}}">返回首页</a>
+        </span>
+    </ul>
+    {% endblock %}
+    <footer>
+        <small>&copy;2020<a href="#">1901电影列表</a></small>
+    </footer>
+</body>
+</html>
