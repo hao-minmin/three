@@ -7,3 +7,5 @@ env
 *.db
 htmlcov/
 .coverage
+..demo/css
+..demo/fonts

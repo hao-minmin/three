@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>倒计时</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+
+<body>
+    <!-- vue中计算属性 设置一个定时器 -->
+    <div id="app" class="container">
+        <h2>
+            <span>倒计时</span>
+            <button v-on:click='start'>
+                <span class="glyphicon glyphicon-play"></span>
+            </button>
+
+            <span class="zt" v-if='workState !== WORK_STATES.WORK'>{{ WORK_STATES.WORK }}</span>
+            <span class="zt" v-if='workState === WORK_STATES.WORK'>{{ WORK_STATES.REST }}</span>
+
+        </h2>
+        <div class="well">
+            <div class="dao-timer">
+                <span>{{ minute }}</span>分钟<span>{{ second }}</span>秒
+            </div>
+        </div>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+    const WORK_STATES = {
+            WORK: '工作',
+            REST: '休息'
+        }
+
+    const WORKING_TIME_LENGTH_IN_MUNUTES = 1
+    const RESTING_TIME_LENGTH_IN_MUNUTES = 5
+    new Vue({
+        el: "#app",
+        data: {
+            minute: WORKING_TIME_LENGTH_IN_MUNUTES,
+            second: 0,
+            WORK_STATES: WORK_STATES,
+            timestamp: 0
+            // 时间戳
+
+        },
+        methods: {
+            start: function() {
+                this._tick()
+                // 每一秒都要调用一下
+                this.intervar = setInterval(this._tick, 1000)
+            },
+            // 用来做计算的
+            _tick: function() {
+                // second不是0  直接减减
+                if (parseInt(this.second) !== 0) {
+                    this.second--;
+                    if (this.second  <  10) {
+                        var a = this.second
+                        var b = '0'
+                            // console.log(this.second)
+                        if (a  >=  0) {
+                            this.second = b + a
+                        }
+                    }
+                    return
+                }
+                
+                // second是0，minute不是0
+                if (this.minute !== 0) {
+                    this.minute--;
+                    this.second = 00;
+
+                    return;
+                }
+                // 秒和分钟都是0   minute 和 second都是0     :否则还是工作的状态
+                this.workState = this.workState === WORK_STATES.WORK ? WORK_STATES.REST : WORK_STATES.WORK
+
+                if (this.workState === WORK_STATES.WORK) {
+                    this.minute = WORKING_TIME_LENGTH_IN_MUNUTES
+
+                } else {
+                    this.minute = RESTING_TIME_LENGTH_IN_MUNUTES
+                }
+
+            }
+        }
+    })
+</script>
+
+</html>
