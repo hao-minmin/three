@@ -20,6 +20,7 @@ def admin(username,password):
         click.echo('更新用户')
         user.username=username
         user.set_password(password)
+        db.session.add(user)
         # user.password_hash=password
     else:
         click.echo('创建用户')

@@ -2,7 +2,7 @@ from blog import db,app
 
 from blog.models import User,Movie
 
-from flask import redirect,render_template,flash,request
+from flask import redirect,render_template,flash,request,url_for
 
 from flask_login import login_required,LoginManager,logout_user,current_user,login_user
 

@@ -18,6 +18,7 @@
     {% block content %}
     <p>总共{{movies|length}}个</p>
 <!-- index.html 提交到index位置  -->
+<!--已经登录显示--> -->
 {% if current_user.is_authenticated%}
     <form action="/" method="POST">
         <!-- 不能为空 required  autocomplete="off" 关闭input框的信息 自动填充-->
